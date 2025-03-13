@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Jobs\SendContactMailJob;
+use App\Models\Contact;
+
 
 class ContactController extends Controller
 {
@@ -19,6 +21,12 @@ class ContactController extends Controller
             'email' => 'required|email',
             'message' => 'required|string|max:500',
         ]);
+
+        Contact::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'message' => $validated['message'],
+    ]);
 
         // Dispatch the email job
         SendContactMailJob::dispatch($validated['name'], $validated['email'], $validated['message']);
